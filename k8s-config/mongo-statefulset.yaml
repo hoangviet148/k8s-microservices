@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mongodb
+  labels:
+    component: mongodb
+spec:
+  selector:
+    matchLabels:
+      component: mongodb
+  serviceName: mongodb
+  template:
+    metadata:
+      labels:
+        component: mongodb
+    spec:
+      containers:
+        - name: mongodb
+          image: mongo:4.2.3-bionic
+          ports:
+            - containerPort: 27017
+          volumeMounts:
+            - mountPath: /data/db
+              name: mongodb-data
+          env:
+            - name: MONGODB_DB
+              value: mongodb
+            - name: MONGODB_USER
+              value: mongodb
+            - name: MONGODB_PASSWORD
+              value: mongodb
+
+  volumeClaimTemplates:
+    - metadata:
+        name: mongodb-data
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        storageClassName: standard
+        resources:
+          requests:
+            storage: 5Gi

@@ -1,0 +1,50 @@
+version: "3.7"
+
+services:
+  microservice:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: microservice
+    env_file: docker-compose.env
+    # command: " services/**/*.service.ts"
+    depends_on:
+      # - nats
+      # - redis
+      - db
+    volumes:
+      - .:/app
+      - /app/node_modules
+    ports:
+      - 3000:3000
+      - 4000:4000
+      - 5000:5000
+    networks:
+      - microservices
+
+  redis:
+    image: redis
+    networks:
+      - microservices
+
+  db:
+    image: mongo:4.2.3-bionic
+    container_name: mongodb
+    ports:
+      - 27017:27017
+    # environment:
+    #   POSTGRES_DB: postgres
+    #   POSTGRES_USER: postgres
+    #   POSTGRES_PASSWORD: postgres
+    volumes:
+      - "mongodata:/data/db"
+    networks:
+      - microservices
+
+volumes:
+  mongodata:
+
+networks:
+  web-crm: 
+    external:
+      name: microservices
