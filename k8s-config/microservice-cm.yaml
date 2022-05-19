@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: microservice-cm
+  labels:
+    component: microservice-cm
+data:
+  # NODE_ENV: testing
+  # SERVICEDIR: dist/app
+  # TRANSPORTER: nats://nats:4222
+  # CACHER: redis://redis:6379
+  DB_NAME: mongodb
+  DB_HOST: mongodb
+  DB_USER: mongodb
+  DB_PASSWORD: mongodb
+  DB_PORT: "27017"

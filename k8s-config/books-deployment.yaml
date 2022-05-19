@@ -5,21 +5,21 @@ metadata:
   labels:
     component: books-service
 spec:
-  revisionHistoryLimit: 1
+  revisionHistoryLimit: 3
+  replicas: 1
+  strategy: # change here
+    type: RollingUpdate
   selector:
     matchLabels:
-      component: categories-service
+      component: books-service
   template:
     metadata:
       labels:
-        component: categories-service
+        component: books-service
     spec:
       containers:
-        - name: categories-service
-          image: 080196/microservice
-          env:
-            - name: NODE_ENV
-              value: testing
+        - name: books-service
+          image: 14802000/books:latest
           envFrom:
             - configMapRef:
-              name: microservice-cm
+                name: microservice-cm

@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orders-service
+  labels:
+    component: orders-service
+spec:
+  revisionHistoryLimit: 1
+  selector:
+    matchLabels:
+      component: orders-service
+  template:
+    metadata:
+      labels:
+        component: orders-service
+    spec:
+      containers:
+        - name: orders-service
+          image: 14802000/orders
+          envFrom:
+            - configMapRef:
+              name: microservice-cm

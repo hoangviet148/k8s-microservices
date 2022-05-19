@@ -1,8 +1,8 @@
-require("dotenv").config();
+// require("dotenv").config();
 const express = require('express');
 
 // Connect
-require('../db/db');
+require('./db.js');
 
 const Customer = require('./Customer');
 

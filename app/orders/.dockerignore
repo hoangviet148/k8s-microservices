@@ -1,0 +1,10 @@
+docker-compose.env
+docker-compose.yml
+Dockerfile
+node_modules
+.vscode
+mongodata
+config
+.editorconfig
+.eslintrc.js
+.gitignore

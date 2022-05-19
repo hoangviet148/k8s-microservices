@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: customers-service
+  labels:
+    component: customers-service
+spec:
+  revisionHistoryLimit: 1
+  selector:
+    matchLabels:
+      component: customers-service
+  template:
+    metadata:
+      labels:
+        component: customers-service
+    spec:
+      containers:
+        - name: customers-service
+          image: 14802000/customers
+          envFrom:
+            - configMapRef:
+              name: microservice-cm

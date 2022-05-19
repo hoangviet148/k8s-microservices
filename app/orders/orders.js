@@ -1,10 +1,10 @@
-require("dotenv").config();
+// require("dotenv").config();
 const express = require('express');
 const mongoose = require("mongoose");
 const axios = require('axios');
 
 // Connect
-require('../db/db');
+require('./db.js');
 
 const Order = require('./Order');
 
