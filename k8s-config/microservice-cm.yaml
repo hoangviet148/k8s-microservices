@@ -11,6 +11,4 @@ data:
   # CACHER: redis://redis:6379
   DB_NAME: mongodb
   DB_HOST: mongodb
-  DB_USER: mongodb
-  DB_PASSWORD: mongodb
   DB_PORT: "27017"
