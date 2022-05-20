@@ -19,4 +19,4 @@ spec:
           image: 14802000/customers
           envFrom:
             - configMapRef:
-              name: microservice-cm
+                name: microservice-cm

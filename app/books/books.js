@@ -1,4 +1,3 @@
-// require("dotenv").config();
 const express = require('express');
 
 // Connect
@@ -10,7 +9,7 @@ const app = express();
 const port = 3000;
 app.use(express.json())
 
-app.post('/book', (req, res) => {
+app.post('/book/create', (req, res) => {
     const newBook = new Book({...req.body});
     newBook.save().then(() => {
           res.send('New Book added successfully!')
@@ -19,7 +18,7 @@ app.post('/book', (req, res) => {
     })
 })
 
-app.get('/books', (req, res) => {
+app.get('/book/getAll', (req, res) => {
    Book.find().then((books) => {
         if (books.length !== 0) {
               res.json(books)
@@ -30,7 +29,7 @@ app.get('/books', (req, res) => {
          res.status(500).send('Internal Server Error!');
     });
 })
-app.get('/book/:id', (req, res) => {
+app.get('/book/getById/:id', (req, res) => {
     Book.findById(req.params.id).then((book) => {
         if (book) {
            res.json(book)
@@ -41,7 +40,7 @@ app.get('/book/:id', (req, res) => {
         res.status(500).send('Internal Server Error!');
     });
 })
-app.delete('/book/:id', (req, res) => {
+app.delete('/book/deleteById/:id', (req, res) => {
     Book.findOneAndRemove(req.params.id).then((book) 	=> {
         if (book) {
              res.json('Book deleted Successfully!')

@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: orders
+  labels: 
+    component: orders
+spec:
+  selector:
+    component: orders-service
+  ports:
+    - port: 5000

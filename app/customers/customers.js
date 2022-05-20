@@ -1,4 +1,3 @@
-// require("dotenv").config();
 const express = require('express');
 
 // Connect
@@ -10,7 +9,7 @@ const app = express();
 const port = 4000;
 app.use(express.json())
 
-app.post('/customer', (req, res) => {
+app.post('/customer/create', (req, res) => {
     const newCustomer = new Customer({...req.body});
     newCustomer.save().then(() => {
        res.send('New Customer created successfully!');
@@ -18,7 +17,8 @@ app.post('/customer', (req, res) => {
         res.status(500).send('Internal Server Error!');
     })
 })
-app.get('/customers', (req, res) => {
+
+app.get('/customer/getAll', (req, res) => {
     Customer.find().then((customers) => {
        if (customers) {
           res.json(customers)
@@ -30,7 +30,7 @@ app.get('/customers', (req, res) => {
    });
 })
 
-app.get('/customer/:id', (req, res) => {
+app.get('/customer/getById/:id', (req, res) => {
     Customer.findById(req.params.id).then((customer) => 	{
      if (customer) {
           res.json(customer)
@@ -42,7 +42,7 @@ app.get('/customer/:id', (req, res) => {
    });
 })
 
-app.delete('/customer/:id', (req, res) => {
+app.delete('/customer/deleteById/:id', (req, res) => {
 Customer.findByIdAndRemove(req.params.id).then((customer) => {
     if (customer) {
          res.json('customer deleted Successfully!')

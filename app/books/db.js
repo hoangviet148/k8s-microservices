@@ -1,13 +1,11 @@
 const mongoose = require('mongoose')
 
-console.log(process.env.DB_HOST) 
-console.log(`$DB_HOST`) 
+const URI = `mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`
+console.log(URI) 
 
-mongoose.connect("mongodb://process.env.DB_HOST:process.env.DB_PORT/process.env.DB_NAME", {
+mongoose.connect(URI , {
     useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useFindAndModify: false,
-    useCreateIndex: true
+    useUnifiedTopology: true
 }).then(() => {
     console.log('Connection successful!');
 }).catch(() => {
