@@ -1,0 +1,11 @@
+spec:
+  project: bookapp
+  destination:
+    server: https://kubernetes.default.svc
+    app_ns: hoangnv46-namespace
+    argo_ns: argocd
+  source:
+    repoURL: https://github.com/hoangviet148/k8s-microservices.git
+    tatgetRevision: HEAD
+
+ 

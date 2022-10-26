@@ -1,0 +1,18 @@
+replicaCount: 1
+
+image:
+  repository: 14802000/customers
+  pullpolicy: IfNotPresent
+  tag: "20220915172151_2"
+
+service:
+  type: ClusterIP
+  port: 4000
+
+extraEnvVars:
+  - name: DB_NAME
+    value: mongodb
+  - name: DB_HOST
+    value: mongodb
+  - name: DB_PORT
+    value: "27017"

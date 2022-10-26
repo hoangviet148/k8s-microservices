@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+  labels: {{ include "customer.selectorLabels" . | indent 4 }}
+spec:
+  revisionHistoryLimit: 2
+  replicas: 2
+  strategy: 
+    type: RollingUpdate
+  selector:
+    matchLabels: {{ include "customer.selectorLabels" . | indent 6 }}
+  template:
+    metadata:
+      labels: {{ include "customer.selectorLabels" . | indent 8 }}
+    spec:
+      containers:
+        - name: {{ .Release.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http 
+              containerPort: 4000
+              protocol: TCP
+          env: 
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
+ 

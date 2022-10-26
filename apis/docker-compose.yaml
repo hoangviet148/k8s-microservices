@@ -1,0 +1,61 @@
+version: "2.2"
+
+services:
+  book:
+    container_name: book
+    restart: always
+    hostname: book
+    image: 14802000/books:20220917105248_12
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    networks:
+      - app-network
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongo db:27017/speech-api --quiet
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  order:
+    container_name: micro-integrator
+    restart: always
+    hostname: micro-integrator
+    image: 14802000/orders:20220825132242_2
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    env_file: stack.env
+    networks:
+      - app-network
+
+  customer:
+    container_name: apim
+    restart: always
+    hostname: apim
+    image: 14802000/customers:20220826132705_21
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    env_file: stack.env
+    networks:
+      - app-network
+
+  mongodb:
+    container_name: apim
+    restart: always
+    hostname: apim
+    image: harbor.mic.gov.vn/esb/api-manager:20220826132705_21
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    env_file: stack.env
+    networks:
+      - app-network
+
+#Docker Networks
+networks:
+  app-network:
+    name: app_network
+    driver: bridge
+  

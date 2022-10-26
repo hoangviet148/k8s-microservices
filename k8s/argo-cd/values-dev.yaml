@@ -1,0 +1,64 @@
+configs:
+  params:
+    server.insecure: true
+
+redis:
+  enabled: false
+
+redis-ha:
+  enabled: true
+  # nodeSelector:
+  #   node_type: "operation"
+
+controller:
+  replicas: 1
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+  # nodeSelector:
+  #   node_type: "operation"
+
+server:
+  replicas: 2
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+  # nodeSelector:
+  #   node_type: "operation"
+  service:
+    type: NodePort
+    nodePortHttp: 31080
+    nodePortHttps: 31443
+
+repoServer:
+  replicas: 2
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+  # nodeSelector:
+  #   node_type: "operation"
+
+dex:
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+  # nodeSelector:
+  #   node_type: "operation"
+
+applicationSet:
+  replicas: 2
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+  # nodeSelector:
+  #   node_type: "operation"
+
+crds: 
+  install: false
+
+fullnameOverride: "bookapp-clusterrole"

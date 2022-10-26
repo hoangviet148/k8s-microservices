@@ -1,0 +1,15 @@
+curl http://bookapp.com/customer/getAll
+curl http://bookapp.com/customer/getById/:id
+curl http://bookapp.com/customer/deleteById/:id
+curl -X POST  http://bookapp.com/customer/create -H 'Content-Type: application/json' -d '{"name": "hoang","age": "22","address":"HH1"}'
+
+curl http://bookapp.com/book/getAll
+curl http://bookapp.com/book/getById/:id
+curl http://bookapp.com/book/deleteById/:id
+curl -X POST  http://bookapp.com/book/create -H 'Content-Type: application/json' -d '{"title": "Lord of the rings","author": "hoang","numberPages": "300","publisher":"NXB Tuoi Tre"}'
+
+curl http://bookapp.com/order/getAll
+curl http://bookapp.com/order/getById/:id
+curl http://bookapp.com/order/deleteById/:id
+curl -X POST  http://bookapp.com/order/create -H 'Content-Type: application/json' -d '{"customerID": "hoang","bookID": "22","initialDate":"HH1","deliveryDate":"HH1"}'
+

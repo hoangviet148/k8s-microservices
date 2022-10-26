@@ -1,0 +1,17 @@
+image:
+  repository: mongo
+  pullPolicy: IfNotPresent
+  tag: "4.2.3-bionic"
+
+extraEnvVars:
+  - name: DB_NAME
+    value: mongodb
+  - name: DB_HOST
+    value: mongodb
+  - name: DB_PORT
+    value: "27017"
+  
+database:
+  accessMode: ReadWriteOnce
+  size: 100Mi
+  sc: ""

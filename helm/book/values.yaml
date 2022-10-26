@@ -1,0 +1,18 @@
+replicaCount: 1
+
+image:
+  repository: 14802000/books
+  pullpolicy: IfNotPresent
+  tag: "20220916043648_25"
+
+service:
+  type: NodePort
+  port: 3000
+
+extraEnvVars:
+  - name: DB_NAME
+    value: mongodb
+  - name: DB_HOST
+    value: mongodb
+  - name: DB_PORT
+    value: "27017"

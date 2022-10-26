@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ .Release.Name }}
+  labels: {{ include "mongo.labels" . | indent 4 }}
+spec:
+  selector:
+    matchLabels: {{ include "mongo.labels" . | indent 6 }}
+  serviceName: mongodb
+  template:
+    metadata:
+      labels: {{ include "mongo.labels" . | indent 8 }}
+    spec:
+      containers:
+        - name: {{ .Release.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http 
+              containerPort: 27017
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /data/db
+              name: mongodb-data
+          env: 
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
+
+  volumeClaimTemplates:
+    - metadata:
+        name: "mongodb-data"
+      spec:
+        accessModes: [{{ .Values.database.accessMode | quote }}]
+        storageClassName: {{ .Values.database.sc }}
+        resources:
+          requests:
+            storage: {{ .Values.database.size | quote }}

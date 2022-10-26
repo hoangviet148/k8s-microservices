@@ -1,0 +1,4 @@
+/helm/book/charts
+/helm/customer/charts
+/helm/order/charts
+/helm/mongodb/charts
