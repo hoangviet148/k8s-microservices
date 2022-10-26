@@ -15,7 +15,7 @@ ARGO_NODEPORT=30080
 # setup argocd
 ARGO_URL="$MASTER_IP:$ARGO_NODEPORT"
 ARGO_USER="admin"
-GIT_REPO="git@github.com:hoangviet148/k8s-microservices.git"
+GIT_REPO="git@bitbucket.org:hoangnvh46/k8s-microservices-example.git"
 GIT_PATH="argocd-bootstrap"
 GIT_BRANCH="master"
 argocd login $ARGO_URL --username $ARGO_USER --password 'vinbdi@2022@#' --insecure
