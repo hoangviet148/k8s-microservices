@@ -20,13 +20,13 @@ GIT_PATH="argocd-bootstrap"
 GIT_BRANCH="master"
 argocd login $ARGO_URL --username $ARGO_USER --password 'vinbdi@2022@#' --insecure
 argocd repo add $GIT_REPO --ssh-private-key-path ~/.ssh/id_ecdsa --insecure-skip-server-verification
-argocd app create argo-bootstrap-ex-hoangnv46 \
+argocd app create argo-bootstrap-ex-hoangnv47 \
 --project bookapp \
 --repo $GIT_REPO \
 --path $GIT_PATH \
 --revision $GIT_BRANCH \
 --revision-history-limit 0 \
---dest-namespace argocd-hoangnv46 \
+--dest-namespace argocd \
 --dest-server https://kubernetes.default.svc \
 --sync-option PruneLast=true \
 --sync-policy automated \
