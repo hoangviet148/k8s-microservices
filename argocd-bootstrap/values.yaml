@@ -6,6 +6,6 @@ spec:
     argo_ns: argocd-hoangnv46
   source:
     repoURL: https://github.com/hoangviet148/k8s-microservices.git
-    tatgetRevision: HEAD
+    targetRevision: HEAD
 
  
