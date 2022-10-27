@@ -26,8 +26,7 @@ argocd app create argo-bootstrap-ex-hoangnv46 \
 --path $GIT_PATH \
 --revision $GIT_BRANCH \
 --revision-history-limit 0 \
---dest-namespace argocd \
+--dest-namespace argocd-hoangnv46 \
 --dest-server https://kubernetes.default.svc \
 --sync-option PruneLast=true \
 --sync-policy automated \
---upsert
