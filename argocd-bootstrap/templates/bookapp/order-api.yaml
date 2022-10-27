@@ -14,7 +14,7 @@ spec:
     source:
         repoURL: {{ .Values.spec.source.repoURL }}
         targetRevision: {{ .Values.spec.source.targetRevision }}
-        path: ./helm/order
+        path: ./helmcharts/order
         helm:
             valueFiles:
                 - values.yaml

@@ -3,7 +3,7 @@ kind: Application
 metadata:
   name: book-api
   annotations:
-    argocd.argoproj.io/manifest-generate-paths: ./helm/book
+    argocd.argoproj.io/manifest-generate-paths: ./helmcharts/book
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
@@ -14,7 +14,7 @@ spec:
     source:
         repoURL: {{ .Values.spec.source.repoURL }}
         targetRevision: {{ .Values.spec.source.targetRevision }}
-        path: ./helm/book
+        path: ./helmcharts/book
         helm:
             valueFiles:
                 - values.yaml
