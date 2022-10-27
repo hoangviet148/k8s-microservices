@@ -26,7 +26,7 @@ node {
                 registry_url = 'harbor-local.vinbase.com' + '/' + svc_name
             }
             stage('Build and Test') {
-                sh "git submodule update --init --recursive"
+                // sh "git submodule update --init --recursive"
                 image = docker.build("${registry_url}:${imageTag}","-f ${svc_dockerfile} .")
             }
             stage('Push to Registry') {
