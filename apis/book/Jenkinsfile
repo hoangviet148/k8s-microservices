@@ -6,11 +6,13 @@ node {
     def argocdServer = "argocd-server.argocd.svc.cluster.local"
     try {
         def String registry_url
-        withEnv(['registryCredential=private-registry', 'image=""', 'BRANCH=""']) {
-            stage('Checkout') {
-                checkout scm
-                sh "git rev-parse --short HEAD > .git/commit-id"
-                imageTag = readFile('.git/commit-id').trim()
+        withEnv(['registryCredential=private-registry']) {
+            dir('bookapp') {
+                stage('Checkout') {
+                    checkout scm
+                    sh "git rev-parse --short HEAD > .git/commit-id"
+                    imageTag = readFile('.git/commit-id').trim()
+                }
             }
             stage('Read deployment configurations') {
                 def d = [DOCKERFILE: './apis/book/Dockerfile']
