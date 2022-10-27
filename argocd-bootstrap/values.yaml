@@ -5,7 +5,7 @@ spec:
     app_ns: hoangnv46-namespace
     argo_ns: argocd-hoangnv46
   source:
-    repoURL: https://github.com/hoangviet148/k8s-microservices.git
+    repoURL: git@bitbucket.org:hoangnvh46/k8s-microservices-example.git
     targetRevision: master
 
  
