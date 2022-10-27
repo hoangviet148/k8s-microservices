@@ -1,5 +1,5 @@
 node {
-    def gitDeploymentRepo = "https://${BITBUCKET_APP_USER}:${BITBUCKET_APP_PASSWD}@bitbucket.org/hoangnvh46/k8s-microservices-example.git"
+    // def gitDeploymentRepo = "https://${BITBUCKET_APP_USER}:${BITBUCKET_APP_PASSWD}@bitbucket.org/hoangnvh46/k8s-microservices-example.git"
     def gitDeploymentBranch = "master"
     def gitDeploymentPath = "helmcharts/book"
     // def valueFile = "values-staging.yaml"
