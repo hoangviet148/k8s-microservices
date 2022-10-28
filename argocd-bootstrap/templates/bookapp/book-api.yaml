@@ -4,8 +4,8 @@ metadata:
   name: book-api
   annotations:
     argocd.argoproj.io/manifest-generate-paths: {{ .Values.spec.source.path }}
-  finalizers:
-    - resources-finalizer.argocd.argoproj.io
+#   finalizers:
+#     - resources-finalizer.argocd.argoproj.io
 spec:
     project: {{ .Values.spec.project }}
     destination:

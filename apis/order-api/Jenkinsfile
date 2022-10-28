@@ -1,67 +1,82 @@
-pipeline {
-    agent {
-        label 'master'
-    }
-
-    environment {
-      GITURL= 'https://github.com/hoangviet148/k8s-microservices.git'
-      IMAGE = "14802000/orders"
-      IMAGE_REGISTRY = "https://index.docker.io/v1/"
-      registryCredential = 'hoangviet148-dockerhub'
-      gitCredential = "hoangviet148-github"
-
-      // docker-compose repo
-      BUILD_USER = 'hoangviet148'
-      BUILD_USER_EMAIL = 'nnvvhh148@gmail.com'
-      DOCKER_COMPOSE_URL = 'https://${username}:${password}@github.com/csd-build/esb/portainer-compose.git'
-    }
-
-    stages {
-        stage('Check-out GIT'){
-            steps{
-                git credentialsId: "$gitCredential", url: "$GITURL"
+node {
+    def gitDeploymentRepo = "git@bitbucket.org:hoangnvh46/k8s-microservices-example.git"
+    def gitDeploymentBranch = "master"
+    def gitDeploymentPath = "helmcharts"
+    def valueFile = "values.yaml"
+    def argocdServer = "argocd-server.argocd.svc.cluster.local"
+    try {
+        def String registry_url
+        withEnv(['registryCredential=hoangnv46-harborCred']) {
+            stage('Checkout') {
+                def PWD = pwd()
+                sh "echo ${WORKSPACE}"
+                sh "ls -l ${WORKSPACE}"
+                checkout scm
+                sh "git rev-parse --short HEAD > .git/commit-id"
+                imageTag = readFile('.git/commit-id').trim()
             }
-        }
+            stage('Read deployment configurations') {
+                def d = [DOCKERFILE: './apis/order-api/Dockerfile']
+                def props    = readProperties defaults: d, file: 'apis/order-api/deploy/kubernetes.properties'
+                svc_dockerfile  = props['DOCKERFILE']
+                svc_replica     = props['NREPLICA']
+                svc_name        = props['SVCNAME']
+                svc_port        = props['SVCPORT']
+                // svc_prefix      = props['PREFIX']
 
-        stage('build-image'){
-            steps {
-                script {
-                    env.TIMESTRAP = sh(returnStdout: true, script: 'date +%Y%m%d%H%M%S').trim()
-                    env.DOCKER_TAG = "${TIMESTRAP}_${BUILD_NUMBER}"
-                    sh 'docker build ./services/orders -t $IMAGE:$DOCKER_TAG'
+                // TODO: update this with a common config
+                // def common_props    = readProperties file: 'common-deploy/config/kubenetes.properties'
+                // registry_url = '10.124.69.3:30444' + '/' + svc_name
+                registry_url = '10.124.69.3:30444'
+            }
+            stage('Build and Test') {
+                // sh "git submodule update --init --recursive"
+                image = docker.build("${registry_url}/hoangnv46_test/order-api:${imageTag}","-f ${svc_dockerfile} .")
+            }
+            stage('Push to Registry') {
+                docker.withRegistry("https://${registry_url}", "hoangnv46-harborCred") {
+                    image.push()
                 }
             }
-        }   
-
-        stage("push Image ") {
-            steps{
-                script {
-                    docker.withRegistry( "$IMAGE_REGISTRY", registryCredential ) {
-                    sh 'docker push $IMAGE:$DOCKER_TAG'
+            stage('Update deployment repository') {
+                try {
+                    updateDeploymentRepository (gitDeploymentRepo, gitDeploymentBranch, gitDeploymentPath, svc_name, valueFile, imageTag)
+                } catch(e) {
+                    retry(1) {
+                        print "======== RETRY"
+                        sleep 10
+                        updateDeploymentRepository (gitDeploymentRepo, gitDeploymentBranch, gitDeploymentPath, svc_name, valueFile, imageTag)
                     }
                 }
             }
+            stage('ArgoCD deploy') {
+                argocdFastExecutor (argocdServer, svc_name)
+            }
         }
-
-        // stage("update docker tag") {
-        //     steps {
-        //             withCredentials([usernamePassword(passwordVariable : 'password' ,usernameVariable : 'username' ,credentialsId : "$gitCredential" ,)]) {
-        //             sh """
-        //                 git config --global user.name "$BUILD_USER"
-        //                 git config --global user.email "$BUILD_USER_EMAIL"
-        //                 rm -rf portainer-compose
-        //                 git clone ${DOCKER_COMPOSE_URL} && cd portainer-compose
-        //                 sed -i "s#$IMAGE.*#${IMAGE}:${DOCKER_TAG}#g" ./esb.yaml
-        //                 git add -A && git commit -m "update tag: ${DOCKER_TAG}" && git push ${DOCKER_COMPOSE_URL}
-        //             """
-        //         }
-        //     }
-        // }    
+    } catch(e) {
+        throw e
     }
+}
 
-    post { 
-      always {
-            echo  "End pipeline"
-        }
+def updateDeploymentRepository (gitDeploymentRepo, gitDeploymentBranch, gitDeploymentPath, svc_name, valueFile, imageTag) {
+    git credentialsId: 'hoangnv46-sshkey-bitbucket', url: gitDeploymentRepo, branch: gitDeploymentBranch
+
+    sh """
+      git config --global user.email "jenkins-local@vinbigdata.com"
+      git config --global user.name "jenkins-local"
+      yq eval '.image.tag = "stg-$imageTag"' -i $gitDeploymentPath/$svc_name/$valueFile
+      git add $gitDeploymentPath/$svc_name/$valueFile
+      git diff-index --quiet HEAD || ( git commit -m 'Update $svc_name with tag: stg-$imageTag' && git push $gitDeploymentRepo )
+    """
+}
+
+def argocdFastExecutor (argocdServer, svc_name) {
+    withCredentials([usernamePassword(credentialsId: 'argo-local-creds', usernameVariable: 'argoUser', passwordVariable: 'argoPasswd')]) {
+        sh """
+            argocd login $argocdServer --insecure --username $argoUser --password $argoPasswd --grpc-web
+            
+            argocd app diff $svc_name --refresh || true
+            argocd app wait $svc_name --timeout 500
+        """
     }
 }
