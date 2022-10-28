@@ -7,5 +7,6 @@ spec:
   source:
     repoURL: git@bitbucket.org:hoangnvh46/k8s-microservices-example.git
     targetRevision: master
+    path: ./helmcharts/book-api
 
  
