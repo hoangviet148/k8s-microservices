@@ -2,7 +2,7 @@ replicaCount: 1
 image:
   repository: 10.124.69.3:30444/hoangnv46_test/order-api
   pullpolicy: IfNotPresent
-  tag: "stg-0c146b1"
+  tag: "stag-08af737"
 service:
   type: ClusterIP
   port: 5000
