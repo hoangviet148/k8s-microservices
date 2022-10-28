@@ -31,7 +31,7 @@ node {
             }
             stage('Build and Test') {
                 // sh "git submodule update --init --recursive"
-                image = docker.build("${registry_url}/hoangnv46_test/order-api:${imageTag}","-f ${svc_dockerfile} .")
+                image = docker.build("${registry_url}/hoangnv46_test/order-api:stag-${imageTag}","-f ${svc_dockerfile} .")
             }
             stage('Push to Registry') {
                 docker.withRegistry("https://${registry_url}", "hoangnv46-harborCred") {
