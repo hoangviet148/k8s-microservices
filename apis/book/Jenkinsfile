@@ -28,11 +28,12 @@ node {
 
                 // TODO: update this with a common config
                 // def common_props    = readProperties file: 'common-deploy/config/kubenetes.properties'
-                registry_url = 'harbor-local.vinbase.com' + '/' + svc_name
+                // registry_url = '10.124.69.3:30444' + '/' + svc_name
+                registry_url = '10.124.69.3:30444/hoangnv46_test'
             }
             stage('Build and Test') {
                 // sh "git submodule update --init --recursive"
-                image = docker.build("${registry_url}/library/book-api:${imageTag}","-f ${svc_dockerfile} .")
+                image = docker.build("${registry_url}/book-api:${imageTag}","-f ${svc_dockerfile} .")
             }
             stage('Push to Registry') {
                 docker.withRegistry("https://${registry_url}", "") {
