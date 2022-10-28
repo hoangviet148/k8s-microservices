@@ -1,6 +1,6 @@
 replicaCount: 1
 image:
-  repository: 14802000/books
+  repository: 10.124.69.3:30444/hoangnv46_test/book-api
   pullpolicy: IfNotPresent
   tag: "20220916043648_25"
 service:
@@ -13,7 +13,3 @@ extraEnvVars:
     value: mongodb
   - name: DB_PORT
     value: "27017"
-application:
-  deployment:
-    image:
-      tag: stg-40d2c5b

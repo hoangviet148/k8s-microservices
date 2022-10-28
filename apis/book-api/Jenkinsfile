@@ -27,11 +27,11 @@ node {
                 // TODO: update this with a common config
                 // def common_props    = readProperties file: 'common-deploy/config/kubenetes.properties'
                 // registry_url = '10.124.69.3:30444' + '/' + svc_name
-                registry_url = '10.124.69.3:30444/hoangnv46_test'
+                registry_url = '10.124.69.3:30444'
             }
             stage('Build and Test') {
                 // sh "git submodule update --init --recursive"
-                image = docker.build("${registry_url}/book-api:${imageTag}","-f ${svc_dockerfile} .")
+                image = docker.build("${registry_url}/hoangnv46_test/book-api:${imageTag}","-f ${svc_dockerfile} .")
             }
             stage('Push to Registry') {
                 docker.withRegistry("https://${registry_url}", "hoangnv46-harborCred") {
@@ -64,7 +64,7 @@ def updateDeploymentRepository (gitDeploymentRepo, gitDeploymentBranch, gitDeplo
     sh """
       git config --global user.email "jenkins-local@vinbigdata.com"
       git config --global user.name "jenkins-local"
-      yq eval '.application.deployment.image.tag = "stg-$imageTag"' -i $gitDeploymentPath/$svc_name/$valueFile
+      yq eval '.image.tag = "stg-$imageTag"' -i $gitDeploymentPath/$svc_name/$valueFile
       git add $gitDeploymentPath/$svc_name/$valueFile
       git diff-index --quiet HEAD || ( git commit -m 'Update $svc_name with tag: stg-$imageTag' && git push $gitDeploymentRepo )
     """
