@@ -3,7 +3,7 @@ image:
   repository: 10.124.69.3:30444/hoangnv46_test/book-api
   pullpolicy: IfNotPresent
   tag: "stg-83fc99c"
-imagePullSecrets: []
+imagePullSecrets: {}
 nameOverride: ""
 fullnameOverride: ""
 serviceAccount:
