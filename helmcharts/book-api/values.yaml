@@ -2,7 +2,7 @@ replicaCount: 1
 image:
   repository: 10.124.69.3:30444/hoangnv46_test/book-api
   pullpolicy: IfNotPresent
-  tag: "stg-914e4a4"
+  tag: "stg-a45bcbd"
 service:
   type: NodePort
   port: 3000
