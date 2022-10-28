@@ -7,16 +7,14 @@ node {
     try {
         def String registry_url
         withEnv(['registryCredential=hoangnv46-harborCred']) {
-            //dir('bookapp') {
-                stage('Checkout') {
-                    def PWD = pwd()
-                    sh "echo ${WORKSPACE}"
-                    sh "ls -l ${WORKSPACE}"
-                    checkout scm
-                    sh "git rev-parse --short HEAD > .git/commit-id"
-                    imageTag = readFile('.git/commit-id').trim()
-                }
-            //}
+            stage('Checkout') {
+                def PWD = pwd()
+                sh "echo ${WORKSPACE}"
+                sh "ls -l ${WORKSPACE}"
+                checkout scm
+                sh "git rev-parse --short HEAD > .git/commit-id"
+                imageTag = readFile('.git/commit-id').trim()
+            }
             stage('Read deployment configurations') {
                 def d = [DOCKERFILE: './apis/book/Dockerfile']
                 def props    = readProperties defaults: d, file: 'deploy/kubernetes.properties'
@@ -36,7 +34,7 @@ node {
                 image = docker.build("${registry_url}/book-api:${imageTag}","-f ${svc_dockerfile} .")
             }
             stage('Push to Registry') {
-                docker.withRegistry("https://${registry_url}", "") {
+                docker.withRegistry("https://${registry_url}", "hoangnv46-harborCred") {
                     image.push()
                 }
             }
