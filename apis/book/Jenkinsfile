@@ -59,7 +59,7 @@ node {
 }
 
 def updateDeploymentRepository (gitDeploymentRepo, gitDeploymentBranch, gitDeploymentPath, svc_name, valueFile, imageTag) {
-    git credentialsId: 'bitbucket-sshkey', url: gitDeploymentRepo, branch: gitDeploymentBranch
+    git credentialsId: 'hoangnv46-sshkey-bitbucket', url: gitDeploymentRepo, branch: gitDeploymentBranch
 
     sh """
       git config --global user.email "jenkins-local@vinbigdata.com"
@@ -71,7 +71,7 @@ def updateDeploymentRepository (gitDeploymentRepo, gitDeploymentBranch, gitDeplo
 }
 
 def argocdFastExecutor (argocdServer, svc_name) {
-    withCredentials([usernamePassword(credentialsId: 'argo-staging-creds', usernameVariable: 'argoUser', passwordVariable: 'argoPasswd')]) {
+    withCredentials([usernamePassword(credentialsId: 'argo-local-creds', usernameVariable: 'argoUser', passwordVariable: 'argoPasswd')]) {
         sh """
             argocd login $argocdServer --insecure --username $argoUser --password $argoPasswd --grpc-web
             
