@@ -7,7 +7,7 @@ node {
     try {
         def String registry_url
         withEnv(['registryCredential=hoangnv46-harborCred']) {
-            dir('bookapp') {
+            //dir('bookapp') {
                 stage('Checkout') {
                     def PWD = pwd()
                     sh "echo ${WORKSPACE}"
@@ -16,7 +16,7 @@ node {
                     sh "git rev-parse --short HEAD > .git/commit-id"
                     imageTag = readFile('.git/commit-id').trim()
                 }
-            }
+            //}
             stage('Read deployment configurations') {
                 def d = [DOCKERFILE: './apis/book/Dockerfile']
                 def props    = readProperties defaults: d, file: 'deploy/kubenetes.properties'
