@@ -1,14 +1,11 @@
 replicaCount: 1
-
 image:
   repository: 10.124.69.3:30444/hoangnv46_test/order-api
   pullpolicy: IfNotPresent
-  tag: "20220915172206_2"
-
+  tag: "stg-0c146b1"
 service:
   type: ClusterIP
   port: 5000
-
 extraEnvVars:
   - name: DB_NAME
     value: mongodb
