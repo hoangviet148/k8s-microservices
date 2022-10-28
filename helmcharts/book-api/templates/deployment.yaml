@@ -14,10 +14,10 @@ spec:
     metadata:
       labels: {{ include "book.selectorLabels" . | indent 8 }}
     spec:
-      {{- with .Values.imagePullSecrets -}}
+      {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
-        {{- toYaml . | nindent 8 -}}
-      {{- end -}}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       serviceAccountName: {{ .Values.serviceAccount.name }}
       containers:
         - name: {{ .Release.Name }}
