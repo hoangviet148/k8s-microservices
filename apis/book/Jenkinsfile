@@ -1,8 +1,8 @@
 node {
-    // def gitDeploymentRepo = "https://${BITBUCKET_APP_USER}:${BITBUCKET_APP_PASSWD}@bitbucket.org/hoangnvh46/k8s-microservices-example.git"
+    def gitDeploymentRepo = "git@bitbucket.org:hoangnvh46/k8s-microservices-example.git"
     def gitDeploymentBranch = "master"
     def gitDeploymentPath = "helmcharts/book"
-    // def valueFile = "values-staging.yaml"
+    def valueFile = "values.yaml"
     def argocdServer = "argocd-server.argocd.svc.cluster.local"
     try {
         def String registry_url
