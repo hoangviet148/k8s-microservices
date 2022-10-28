@@ -17,7 +17,7 @@ node {
             }
             stage('Read deployment configurations') {
                 def d = [DOCKERFILE: './apis/book/Dockerfile']
-                def props    = readProperties defaults: d, file: 'deploy/kubernetes.properties'
+                def props    = readProperties defaults: d, file: 'apis/book/deploy/kubernetes.properties'
                 svc_dockerfile  = props['DOCKERFILE']
                 svc_replica     = props['NREPLICA']
                 svc_name        = props['SVCNAME']
@@ -42,7 +42,7 @@ node {
                 try {
                     updateDeploymentRepository (gitDeploymentRepo, gitDeploymentBranch, gitDeploymentPath, svc_name, valueFile, imageTag)
                 } catch(e) {
-                    retry(3) {
+                    retry(1) {
                         print "======== RETRY"
                         sleep 10
                         updateDeploymentRepository (gitDeploymentRepo, gitDeploymentBranch, gitDeploymentPath, svc_name, valueFile, imageTag)
