@@ -2,7 +2,7 @@ replicaCount: 1
 image:
   repository: 10.124.69.3:30444/hoangnv46_test/book-api
   pullpolicy: IfNotPresent
-  tag: "stg-f410d0e"
+  tag: "stag-a269898"
 imagePullSecrets: {}
 nameOverride: ""
 fullnameOverride: ""
