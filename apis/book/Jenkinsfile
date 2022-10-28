@@ -10,8 +10,8 @@ node {
             dir('bookapp') {
                 stage('Checkout') {
                     def PWD = pwd()
-                    echo $PWD
-                    ll $PWD
+                    echo ${PWD}
+                    ll ${PWD}
                     checkout scm
                     sh "git rev-parse --short HEAD > .git/commit-id"
                     imageTag = readFile('.git/commit-id').trim()
