@@ -19,7 +19,7 @@ node {
             //}
             stage('Read deployment configurations') {
                 def d = [DOCKERFILE: './apis/book/Dockerfile']
-                def props    = readProperties defaults: d, file: 'deploy/kubenetes.properties'
+                def props    = readProperties defaults: d, file: 'deploy/kubernetes.properties'
                 svc_dockerfile  = props['DOCKERFILE']
                 svc_replica     = props['NREPLICA']
                 svc_name        = props['SVCNAME']
@@ -32,7 +32,7 @@ node {
             }
             stage('Build and Test') {
                 // sh "git submodule update --init --recursive"
-                image = docker.build("${registry_url}:${imageTag}","-f ${svc_dockerfile} .")
+                image = docker.build("${registry_url}/library/book-api:${imageTag}","-f ${svc_dockerfile} .")
             }
             stage('Push to Registry') {
                 docker.withRegistry("https://${registry_url}", "") {
