@@ -64,9 +64,9 @@ def updateDeploymentRepository (gitDeploymentRepo, gitDeploymentBranch, gitDeplo
     sh """
       git config --global user.email "jenkins-local@vinbigdata.com"
       git config --global user.name "jenkins-local"
-      yq eval '.image.tag = "stg-$imageTag"' -i $gitDeploymentPath/$svc_name/$valueFile
+      yq eval '.image.tag = "stag-$imageTag"' -i $gitDeploymentPath/$svc_name/$valueFile
       git add $gitDeploymentPath/$svc_name/$valueFile
-      git diff-index --quiet HEAD || ( git commit -m 'Update $svc_name with tag: stg-$imageTag' && git push $gitDeploymentRepo )
+      git diff-index --quiet HEAD || ( git commit -m 'Update $svc_name with tag: stag-$imageTag' && git push $gitDeploymentRepo )
     """
 }
 
