@@ -6,9 +6,10 @@ node {
     def argocdServer = "argocd-server.argocd.svc.cluster.local"
     try {
         def String registry_url
-        withEnv(['registryCredential=hoangnv46-harborCred	']) {
+        withEnv(['registryCredential=hoangnv46-harborCred']) {
             dir('bookapp') {
                 stage('Checkout') {
+                    def PWD = pwd()
                     echo $PWD
                     ll $PWD
                     checkout scm
