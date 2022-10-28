@@ -6,9 +6,11 @@ node {
     def argocdServer = "argocd-server.argocd.svc.cluster.local"
     try {
         def String registry_url
-        withEnv(['registryCredential=private-registry']) {
+        withEnv(['registryCredential=hoangnv46-harborCred	']) {
             dir('bookapp') {
                 stage('Checkout') {
+                    echo $PWD
+                    ll $PWD
                     checkout scm
                     sh "git rev-parse --short HEAD > .git/commit-id"
                     imageTag = readFile('.git/commit-id').trim()
