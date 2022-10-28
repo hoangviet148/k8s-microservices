@@ -1,7 +1,7 @@
 replicaCount: 1
 
 image:
-  repository: 14802000/orders
+  repository: 10.124.69.3:30444/hoangnv46_test/order-api
   pullpolicy: IfNotPresent
   tag: "20220915172206_2"
 
