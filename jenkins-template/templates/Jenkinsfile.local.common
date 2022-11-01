@@ -12,8 +12,8 @@ node {
         imageTag = readFile('.git/commit-id').trim()
     }
     stage('Read deployment configurations') {
-        def d = [DOCKERFILE: './apis/${SERVICE_NAME}/Dockerfile']
-        def props    = readProperties defaults: d, file: 'apis/${SERVICE_NAME}/deploy/kubernetes.properties'
+        def d = [DOCKERFILE: `./apis/${SERVICE_NAME}/Dockerfile`]
+        def props    = readProperties defaults: d, file: `apis/${SERVICE_NAME}/deploy/kubernetes.properties`
         svc_dockerfile  = props['DOCKERFILE']
         svc_replica     = props['NREPLICA']
         svc_name        = props['SVCNAME']
