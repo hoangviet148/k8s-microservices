@@ -5,7 +5,7 @@ def bookapp_api_list = [
 ]
 
 bookapp_api_list.each { api ->
-    pipelineJob() {
+    pipelineJob("hoangnv46/${api['job_name']}") {
         environmentVariables {
             env('SERVICE_NAME', "${api['service_name']}")
             env('VALUES_LOCAL_PARSE_PATTERN', "${api['values_local_parse_pattern']}")
