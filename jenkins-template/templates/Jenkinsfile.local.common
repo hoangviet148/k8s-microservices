@@ -7,7 +7,7 @@ node {
     def String registry_url
 
     stage('Checkout') {
-        git branch: '$BRANCH', credentialsId: 'bitbucket-sshkey', url: 'git@bitbucket.org:hoangnvh46/k8s-microservices-example.git'
+        git branch: '$BRANCH', credentialsId: 'hoangnv46-sshkey-bitbucket', url: 'git@bitbucket.org:hoangnvh46/k8s-microservices-example.git'
         sh "git rev-parse --short HEAD > .git/commit-id"
         imageTag = readFile('.git/commit-id').trim()
     }
