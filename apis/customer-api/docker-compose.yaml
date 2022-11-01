@@ -1,0 +1,18 @@
+version: "2.2"
+
+services:
+  book:
+    container_name: book
+    restart: always
+    hostname: book
+    image: 14802000/books:20220917105248_12
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    networks:
+      - app-network
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongo db:27017/speech-api --quiet
+      interval: 30s
+      timeout: 10s
+      retries: 5

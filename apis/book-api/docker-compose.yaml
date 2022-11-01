@@ -1,0 +1,17 @@
+version: "2.2"
+
+services:
+  book:
+    container_name: book
+    restart: on-failure
+    hostname: book
+    image: 10.124.69.3:30444/hoangnv46_test/book-api:stag-932446e
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    network_mode: host
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongo db:27017/mongodb --quiet
+      interval: 30s
+      timeout: 10s
+      retries: 5
