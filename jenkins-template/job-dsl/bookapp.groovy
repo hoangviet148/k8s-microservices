@@ -1,6 +1,6 @@
 def bookapp_api_list = [
-    [service_name: "book-api", job_name: "book-api", values_local_parse_pattern: ".image.tag", jenkinsfile_template: "Jenkinsfile.local.common", default_branch: 'master']
-    [service_name: "customer-api", job_name: "customer-api", values_local_parse_pattern: ".image.tag", jenkinsfile_template: "Jenkinsfile.local.common", default_branch: 'master']
+    [service_name: "book-api", job_name: "book-api", values_local_parse_pattern: ".image.tag", jenkinsfile_template: "Jenkinsfile.local.common", default_branch: 'master'],
+    [service_name: "customer-api", job_name: "customer-api", values_local_parse_pattern: ".image.tag", jenkinsfile_template: "Jenkinsfile.local.common", default_branch: 'master'],
     [service_name: "order-api", job_name: "order-api", values_local_parse_pattern: ".image.tag", jenkinsfile_template: "Jenkinsfile.local.common", default_branch: 'master']
 ]
 
