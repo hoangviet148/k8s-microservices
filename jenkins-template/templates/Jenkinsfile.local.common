@@ -7,13 +7,13 @@ node {
     def String registry_url
 
     stage('Checkout') {
-        git branch: 'master', credentialsId: 'hoangnv46-sshkey-bitbucket', url: 'git@bitbucket.org:hoangnvh46/k8s-microservices-example.git'
+        git branch: 'master', credentialsId: 'hoangnv46-sshkey-bitbucket', url: "git@bitbucket.org:hoangnvh46/k8s-microservices-example.git"
         sh "git rev-parse --short HEAD > .git/commit-id"
         imageTag = readFile('.git/commit-id').trim()
     }
     stage('Read deployment configurations') {
         def d = [DOCKERFILE: './apis/${SERVICE_NAME}/Dockerfile']
-        def props    = readProperties defaults: d, file: 'apis/${SERVICE_NAME}/deploy/kubernetes.properties'
+        def props    = readProperties defaults: d, file: "apis/${SERVICE_NAME}/deploy/kubernetes.properties"
         svc_dockerfile  = props['DOCKERFILE']
         svc_name        = props['SVCNAME']
 
