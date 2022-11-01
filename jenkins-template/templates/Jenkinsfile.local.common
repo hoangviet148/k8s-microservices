@@ -1,0 +1,70 @@
+node {
+    def gitDeploymentRepo = "git@bitbucket.org:hoangnvh46/k8s-microservices-example.git"
+    def gitDeploymentBranch = "master"
+    def gitDeploymentPath = "helmcharts"
+    def valueFile = "values.yaml"
+    def argocdServer = "argocd-server.argocd.svc.cluster.local"
+    def String registry_url
+
+    stage('Checkout') {
+        git branch: '$BRANCH', credentialsId: 'bitbucket-sshkey', url: 'git@bitbucket.org:hoangnvh46/k8s-microservices-example.git'
+        sh "git rev-parse --short HEAD > .git/commit-id"
+        imageTag = readFile('.git/commit-id').trim()
+    }
+    stage('Read deployment configurations') {
+        def d = [DOCKERFILE: './apis/${SERVICE_NAME}/Dockerfile']
+        def props    = readProperties defaults: d, file: 'apis/${SERVICE_NAME}/deploy/kubernetes.properties'
+        svc_dockerfile  = props['DOCKERFILE']
+        svc_replica     = props['NREPLICA']
+        svc_name        = props['SVCNAME']
+        svc_port        = props['SVCPORT']
+
+        // registry_url = '10.124.69.3:30444' + '/' + svc_name
+        registry_url = '10.124.69.3:30444'
+    }
+    stage('Build and Test') {
+        // sh "git submodule update --init --recursive"
+        image = docker.build("${registry_url}/hoangnv46_test/book-api:stag-${imageTag}","-f ${svc_dockerfile} .")
+    }
+    stage('Push to Registry') {
+        docker.withRegistry("https://${registry_url}", "hoangnv46-harborCred") {
+            image.push()
+        }
+    }
+    stage('Update deployment repository') {
+        try {
+            updateDeploymentRepository (gitDeploymentRepo, gitDeploymentBranch, gitDeploymentPath, svc_name, valueFile, imageTag)
+        } catch(e) {
+            retry(1) {
+                print "======== RETRY"
+                sleep 10
+                updateDeploymentRepository (gitDeploymentRepo, gitDeploymentBranch, gitDeploymentPath, svc_name, valueFile, imageTag)
+            }
+        }
+    }
+    stage('ArgoCD deploy') {
+        argocdFastExecutor (argocdServer, svc_name)
+    }
+}
+
+def updateDeploymentRepository (gitDeploymentRepo, gitDeploymentBranch, gitDeploymentPath, svc_name, valueFile, imageTag) {
+    git credentialsId: 'hoangnv46-sshkey-bitbucket', url: gitDeploymentRepo, branch: gitDeploymentBranch
+    sh """
+      git config --global user.email "jenkins-local@vinbigdata.com"
+      git config --global user.name "jenkins-local"
+      yq eval '${VALUES_LOCAL_PARSE_PATTERN} = "stag-$imageTag"' -i $gitDeploymentPath/$svc_name/$valueFile
+      git add $gitDeploymentPath/$svc_name/$valueFile
+      git diff-index --quiet HEAD || ( git commit -m 'Update $svc_name with tag: stag-$imageTag' && git push $gitDeploymentRepo )
+    """
+}
+
+def argocdFastExecutor (argocdServer, svc_name) {
+    withCredentials([usernamePassword(credentialsId: 'argo-local-creds', usernameVariable: 'argoUser', passwordVariable: 'argoPasswd')]) {
+        sh """
+            argocd login $argocdServer --insecure --username $argoUser --password $argoPasswd --grpc-web
+            
+            argocd app diff $svc_name --refresh || true
+            argocd app wait $svc_name --timeout 500
+        """
+    }
+}
