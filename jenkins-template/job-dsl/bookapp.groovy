@@ -26,7 +26,7 @@ bookapp_api_list.each { api ->
         }
         definition {
             cps {
-                script(readFileFromWorkspace("templates/${api['jenkinsfile_template']}"))
+                script(readFileFromWorkspace("jenkins-template/templates/${api['jenkinsfile_template']}"))
                 sandbox()
             }
         }
