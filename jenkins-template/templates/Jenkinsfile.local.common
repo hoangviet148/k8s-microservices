@@ -7,24 +7,21 @@ node {
     def String registry_url
 
     stage('Checkout') {
-        git branch: '$BRANCH', credentialsId: 'hoangnv46-sshkey-bitbucket', url: 'git@bitbucket.org:hoangnvh46/k8s-microservices-example.git'
+        git branch: 'master', credentialsId: 'hoangnv46-sshkey-bitbucket', url: 'git@bitbucket.org:hoangnvh46/k8s-microservices-example.git'
         sh "git rev-parse --short HEAD > .git/commit-id"
         imageTag = readFile('.git/commit-id').trim()
     }
     stage('Read deployment configurations') {
-        def d = [DOCKERFILE: `./apis/${SERVICE_NAME}/Dockerfile`]
-        def props    = readProperties defaults: d, file: `apis/${SERVICE_NAME}/deploy/kubernetes.properties`
+        def d = [DOCKERFILE: './apis/${SERVICE_NAME}/Dockerfile']
+        def props    = readProperties defaults: d, file: 'apis/${SERVICE_NAME}/deploy/kubernetes.properties'
         svc_dockerfile  = props['DOCKERFILE']
-        svc_replica     = props['NREPLICA']
         svc_name        = props['SVCNAME']
-        svc_port        = props['SVCPORT']
 
-        // registry_url = '10.124.69.3:30444' + '/' + svc_name
         registry_url = '10.124.69.3:30444'
     }
     stage('Build and Test') {
         // sh "git submodule update --init --recursive"
-        image = docker.build("${registry_url}/hoangnv46_test/book-api:stag-${imageTag}","-f ${svc_dockerfile} .")
+        image = docker.build("${registry_url}/hoangnv46_test/${SERVICE_NAME}:stag-${imageTag}","-f ${svc_dockerfile} .")
     }
     stage('Push to Registry') {
         docker.withRegistry("https://${registry_url}", "hoangnv46-harborCred") {
